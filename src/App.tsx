@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
 import SearchBar from "./components/SearchBar";
 import './styles/App.css';
+import { Button, CircularProgress, Link, Typography, Container, Box } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Snackbar } from '@mui/material';
 
+// Define your theme
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1877F2', // Example color
+    },
+
+  },
+});
 const App: React.FC = () => {
-  const [s3Link, setS3Link] = useState(false);
+  const [s3Link, setS3Link] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false); // New state to track if a search is in progress
-
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const handleSearch = async (address: string) => {
     if(isSearching) return; // Prevent searching if already in progress
 
     setIsSearching(true); // Disable the search button
-    setS3Link(false);
+ 
     console.log('S3 Link State:before', s3Link);
     try {
-      const url = new URL('https://4o7ziggfwa7v7265bpdcdd3ua40nogyu.lambda-url.ap-northeast-1.on.aws/');
+      const url = new URL('https://k6dc2hc344kbuw4zjrxdq2m6wy0yxnxc.lambda-url.us-east-1.on.aws/');
       url.searchParams.append('address', address);
 
       const response = await fetch(url.toString(), {
@@ -25,13 +37,14 @@ const App: React.FC = () => {
       }
 
       const responseBody = await response.text();
-      const parsedBody = JSON.parse(responseBody); // First parse to get the JSON string
-      const data = JSON.parse(parsedBody.body); // Second parse to get the actual object
+      const data = JSON.parse(responseBody);
   
-      if (data && data.download_url) {
-        setS3Link(data.download_url); // Update the s3Link with the actual download URL
+      if (data.records_found) {
+        setS3Link(data.message); // Make sure this is a valid URL
+      } else {
+        setS3Link(null);
+        setOpenSnackbar(true);  // Make sure to reset the s3Link if no URL is present
       }
-
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -42,15 +55,38 @@ const App: React.FC = () => {
   };
 
   return (
-    <>
-      <div className="App">
-        <header className="App-header">
+    
+    <ThemeProvider theme={theme}>
+      <Container className="App">
+      <Snackbar
+  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+  open={openSnackbar}
+  autoHideDuration={6000}
+  onClose={() => setOpenSnackbar(false)}
+  message="Record not found for the given address."
+/>
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="h4" gutterBottom>
+            Ally Lottery Box
+          </Typography>
           <SearchBar onSearch={handleSearch} isSearching={isSearching} />
-          {s3Link && <a href={s3Link} download="file.xlsx">Download Excel File</a>}
-        </header>
-      </div>
-    </>
-  );
-};
+          {isSearching && <CircularProgress />}
+          {s3Link && (
+            <Box sx={{ mt: 2 }}> {/* Add margin top for spacing */}
+              <Button 
+                variant="contained" 
+                color="primary" 
+                href={s3Link} 
+                download="file.xlsx"
+                component={Link}
+              >
+                Download Excel File
+              </Button>
+            </Box>
+          )}
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );}
 
 export default App;

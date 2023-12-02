@@ -1,35 +1,47 @@
 /* src/App.css */
 .App {
-    text-align: center;
-    width: 100%; /* Ensure the app container takes full width */
-  }
-  
-  .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
-  
-  .search-bar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px; /* Adjust the gap as needed */
-    width: 100%; /* Ensure the search bar takes full width of its parent */
-  }
-  
-  .search-bar input {
-    width: 60%; /* Adjust to your preference */
-    max-width: none; /* Removes the maximum width constraint */
-  }
-  
-  .search-bar button {
-    width: 50%; /* Adjust the width as needed */
-    max-width: 200px; /* Or any max-width that suits your design */
-  }
-  
+  text-align: center;
+  width: 100%;
+}
+
+.App-header {
+  background-color: #1877F2; /* Facebook's blue */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.search-bar input {
+  width: 60%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  max-width: 600px; /* Adjust max-width as needed */
+}
+
+.search-bar button {
+  width: 30%;
+  padding: 10px;
+  background-color: #4267B2; /* Darker Facebook blue */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  max-width: 200px;
+}
+
+.search-bar button:hover {
+  background-color: #365899; /* Even darker blue for hover effect */
+}
