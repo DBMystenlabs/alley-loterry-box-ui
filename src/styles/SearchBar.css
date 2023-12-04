@@ -1,0 +1,17 @@
+/* SearchBar.css */
+.search-bar button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed; /* Shows a 'no action' cursor when hovering over the disabled button */
+  }
+  
+  .search-bar button:not(:disabled):hover {
+    /* Your hover styles here */
+    background-color: #365899; /* Darker shade for hover effect */
+  }
+  
+  /* SearchBar.css */
+.error-message {
+    color: red; /* Error message color */
+    /* Other styles as needed */
+  }
+  

@@ -1,5 +1,6 @@
 // SearchBar.tsx
 import React, { useState } from 'react';
+import '../styles/SearchBar.css';
 
 interface SearchBarProps {
   onSearch: (address: string) => void;
@@ -8,9 +9,15 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching }) => {
   const [address, setAddress] = useState('');
+  const walletAddressPattern = /^0x[a-fA-F0-9]{64}$/; // Regular expression for wallet address
+
+  // Function to check if the address is valid
+  const isValidAddress = walletAddressPattern.test(address);
 
   const handleSearchClick = () => {
-    onSearch(address);
+    if (isValidAddress) {
+      onSearch(address);
+    }
   };
 
   return (
@@ -21,13 +28,17 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching }) => {
         value={address}
         onChange={(e) => setAddress(e.target.value)}
         disabled={isSearching} // Disable input while searching
+        className={!isValidAddress && address !== '' ? 'error' : ''}
       />
+      {!isValidAddress && address !== '' && (
+        <p className="error-message">Invalid Address</p> // Error message displayed when address is invalid
+      )}
       <button 
         onClick={handleSearchClick} 
-        disabled={isSearching} // Disable button while searching
-        style={{ opacity: isSearching ? 0.5 : 1 }}
+        disabled={isSearching || !isValidAddress} // Disable button while searching or if address is invalid
+        style={{ opacity: (isSearching || !isValidAddress) ? 0.5 : 1 }}
       >
-        {isSearching ? 'Searching...' : 'Search'}
+        {isSearching ? 'Calculating...' : 'Calculate'}
       </button>
     </div>
   );
