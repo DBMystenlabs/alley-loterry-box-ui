@@ -1,17 +1,16 @@
-// SearchBar.tsx
 import React, { useState } from 'react';
 import '../styles/SearchBar.css';
 
 interface SearchBarProps {
   onSearch: (address: string) => void;
   isSearching: boolean;
+  hideCalculateButton: boolean;  // Added prop
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching, hideCalculateButton }) => {
   const [address, setAddress] = useState('');
-  const walletAddressPattern = /^0x[a-fA-F0-9]{64}$/; // Regular expression for wallet address
+  const walletAddressPattern = /^0x[a-fA-F0-9]{64}$/;
 
-  // Function to check if the address is valid
   const isValidAddress = walletAddressPattern.test(address);
 
   const handleSearchClick = () => {
@@ -27,19 +26,21 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching }) => {
         placeholder="Enter Wallet Address"
         value={address}
         onChange={(e) => setAddress(e.target.value)}
-        disabled={isSearching} // Disable input while searching
+        disabled={isSearching}
         className={!isValidAddress && address !== '' ? 'error' : ''}
       />
       {!isValidAddress && address !== '' && (
-        <p className="error-message">Invalid Address</p> // Error message displayed when address is invalid
+        <p className="error-message">Invalid Address</p>
       )}
-      <button 
-        onClick={handleSearchClick} 
-        disabled={isSearching || !isValidAddress} // Disable button while searching or if address is invalid
-        style={{ opacity: (isSearching || !isValidAddress) ? 0.5 : 1 }}
-      >
-        {isSearching ? 'Calculating...' : 'Calculate'}
-      </button>
+      {!hideCalculateButton && (  // Conditional rendering based on hideCalculateButton
+        <button 
+          onClick={handleSearchClick} 
+          disabled={isSearching || !isValidAddress}
+          style={{ opacity: (isSearching || !isValidAddress) ? 0.5 : 1 }}
+        >
+          {isSearching ? 'Calculating...' : 'Calculate'}
+        </button>
+      )}
     </div>
   );
 };
