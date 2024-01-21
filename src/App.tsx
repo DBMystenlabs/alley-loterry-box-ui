@@ -17,35 +17,46 @@ const App: React.FC = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const handleSearch = async (address: string) => {
-    if (isSearching) return;
-    setIsSearching(true);
-
-    try {
-      const url = new URL('https://k6dc2hc344kbuw4zjrxdq2m6wy0yxnxc.lambda-url.us-east-1.on.aws/');
-      url.searchParams.append('address', address);
-
-      const response = await fetch(url.toString(), { method: 'GET' });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+ 
+    const handleSearch = async (address: string, startEpoch: string, endEpoch: string) => {
+      if (isSearching) return;
+      setIsSearching(true);
+    
+      try {
+        const requestBody = {
+          wallet_address: address,
+          start_epoch: parseInt(startEpoch),
+          end_epoch: parseInt(endEpoch)
+        };
+    
+        const response = await fetch('https://oew5h4gstfko43dzfzzll6sz4i0stnyq.lambda-url.us-east-1.on.aws/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        });
+    
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    
+        const data = await response.json();
+    
+        if (data.records_found) {
+          setS3Link(data.download_url);
+        } else {
+          setS3Link(null);
+          setOpenSnackbar(true);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsSearching(false);
       }
-
-      const responseBody = await response.text();
-      const data = JSON.parse(responseBody);
-
-      if (data.records_found) {
-        setS3Link(data.message);
-      } else {
-        setS3Link(null);
-        setOpenSnackbar(true);
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setIsSearching(false);
-    }
-  };
+    };
+    
+  
 
   return (
     <ThemeProvider theme={theme}>
