@@ -9,11 +9,12 @@ const DataTable: React.FC<DataTableProps> = ({ data }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
-  if (!data || data.length === 0) return <p>No data available</p>;
+  if (!data || data.length === 0) return <p> </p>;
 
   const columns = data[0] ? Object.keys(data[0]) : [];
 
   const handleChangePage = (event: unknown, newPage: number) => {
+    console.log(event)
     setPage(newPage);
   };
 

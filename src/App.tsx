@@ -18,10 +18,10 @@ const App: React.FC = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [tableData, setTableData] = useState<{ [key: string]: any }[]>([]);
-  const [lastSearch, setLastSearch] = useState<{ address: string; startEpoch: string; endEpoch: string } | null>(null);
+
 
   const handleSearch = async (address: string, startEpoch: string, endEpoch: string) => {
-    setLastSearch({ address, startEpoch, endEpoch }); // Store the last search parameters
+    // Store the last search parameters
     if (isSearching) return;
     setIsSearching(true);
 
