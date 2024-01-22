@@ -10,9 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
+    "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.14.19",
+    "@mui/material": "^5.15.5",
     "@mysten/dapp-kit": "0.9.1",
     "@mysten/sui.js": "0.47.0",
     "@radix-ui/colors": "^3.0.0",

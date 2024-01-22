@@ -12,16 +12,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching, hideCalcul
   const [address, setAddress] = useState('');
   const [startEpoch, setStartEpoch] = useState('');
   const [endEpoch, setEndEpoch] = useState('');
+  const [epochError, setEpochError] = useState('');
   const walletAddressPattern = /^0x[a-fA-F0-9]{64}$/;
   const epochPattern = /^\d+$/; // Regular expression for integer values
 
   const isValidAddress = walletAddressPattern.test(address);
   const isValidStartEpoch = epochPattern.test(startEpoch);
   const isValidEndEpoch = epochPattern.test(endEpoch);
-  const isFormValid = isValidAddress && isValidStartEpoch && isValidEndEpoch;
+  const isEpochOrderValid = parseInt(startEpoch, 10) <= parseInt(endEpoch, 10);
+  const isFormValid = isValidAddress && isValidStartEpoch && isValidEndEpoch && isEpochOrderValid;
 
   const handleSearchClick = () => {
+    if (!isEpochOrderValid) {
+      setEpochError('Start epoch should not be greater than end epoch.');
+      return;
+    }
+
     if (isFormValid) {
+      setEpochError(''); // Clear any previous error messages
       onSearch(address, startEpoch, endEpoch);
     }
   };
@@ -36,6 +44,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching, hideCalcul
         disabled={isSearching}
         className={!isValidAddress && address !== '' ? 'error' : ''}
       />
+      {!isValidAddress && address !== '' && <p className="error-message">Invalid Address</p>}
+      
       <input
         type="text"
         placeholder="Start Epoch"
@@ -52,7 +62,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching, hideCalcul
         disabled={isSearching}
         className={!isValidEndEpoch && endEpoch !== '' ? 'error' : ''}
       />
-      {!isValidAddress && address !== '' && <p className="error-message">Invalid Address</p>}
+      {epochError && <p className="error-message">{epochError}</p>}
       {(!isValidStartEpoch || !isValidEndEpoch) && startEpoch !== '' && endEpoch !== '' && (
         <p className="error-message">Invalid Epoch Value</p>
       )}
