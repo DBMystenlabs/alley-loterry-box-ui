@@ -10,27 +10,18 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching, hideCalculateButton }) => {
   const [address, setAddress] = useState('');
-  const [startEpoch, setStartEpoch] = useState('');
   const [endEpoch, setEndEpoch] = useState('');
-  const [epochError, setEpochError] = useState('');
   const walletAddressPattern = /^0x[a-fA-F0-9]{64}$/;
-  const epochPattern = /^\d+$/; // Regular expression for integer values
 
   const isValidAddress = walletAddressPattern.test(address);
-  const isValidStartEpoch = epochPattern.test(startEpoch);
-  const isValidEndEpoch = epochPattern.test(endEpoch);
-  const isEpochOrderValid = parseInt(startEpoch, 10) <= parseInt(endEpoch, 10);
-  const isFormValid = isValidAddress && isValidStartEpoch && isValidEndEpoch && isEpochOrderValid;
+  const isValidEndEpoch = endEpoch !== '' && parseInt(endEpoch, 10) > 0;
+  const isFormValid = isValidAddress && isValidEndEpoch;
 
   const handleSearchClick = () => {
-    if (!isEpochOrderValid) {
-      setEpochError('Start epoch should not be greater than end epoch.');
-      return;
-    }
-
     if (isFormValid) {
-      setEpochError(''); // Clear any previous error messages
-      onSearch(address, startEpoch, endEpoch);
+      onSearch(address, '0', endEpoch);
+    } else {
+      // Handle the error state here, for example, show an error message
     }
   };
 
@@ -49,23 +40,20 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching, hideCalcul
       <input
         type="text"
         placeholder="Start Epoch"
-        value={startEpoch}
-        onChange={(e) => setStartEpoch(e.target.value)}
-        disabled={isSearching}
-        className={!isValidStartEpoch && startEpoch !== '' ? 'error' : ''}
+        value="0"
+        disabled // This input field is always disabled
       />
+
       <input
         type="text"
         placeholder="End Epoch"
         value={endEpoch}
         onChange={(e) => setEndEpoch(e.target.value)}
         disabled={isSearching}
-        className={!isValidEndEpoch && endEpoch !== '' ? 'error' : ''}
+        className={!isValidEndEpoch ? 'error' : ''}
       />
-      {epochError && <p className="error-message">{epochError}</p>}
-      {(!isValidStartEpoch || !isValidEndEpoch) && startEpoch !== '' && endEpoch !== '' && (
-        <p className="error-message">Invalid Epoch Value</p>
-      )}
+     
+      
       {!hideCalculateButton && (
         <button 
           onClick={handleSearchClick} 

@@ -32,7 +32,7 @@ const App: React.FC = () => {
         end_epoch: parseInt(endEpoch)
       };
 
-      const response = await fetch('https://5up66dqpbut7dgpdpmytcvxcsy0uzvte.lambda-url.us-east-1.on.aws/', {
+      const response = await fetch('https://chsazirchtpzbx4ctca343ciwq0lnfoo.lambda-url.us-east-1.on.aws/', {
         method: 'POST',
         body: JSON.stringify(requestBody)
       });
@@ -58,7 +58,11 @@ const App: React.FC = () => {
     }
   };
 
-
+  const handleReset = () => {
+    setS3Link(null);
+    setIsSearching(false);
+    setTableData([]);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -72,10 +76,7 @@ const App: React.FC = () => {
         />
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="h4" gutterBottom>
-            Ally's Lottery Box - V2
-          </Typography>
-          <Typography variant="h6" gutterBottom>
-            Thank you for visiting our lottery box. Good luck!
+            SUI Staking Rewards Calculator
           </Typography>
           <SearchBar 
             onSearch={handleSearch} 
@@ -85,17 +86,25 @@ const App: React.FC = () => {
           {isSearching && <CircularProgress />}
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', gap: 2 }}>
             {s3Link && (
-              <Button 
-                variant="contained" 
-                color="primary" 
-                href={s3Link} 
-                download="file.xlsx"
-                component={Link}
-              >
-                Download Excel File
-              </Button>
+              <>
+                <Button 
+                  variant="contained" 
+                  color="primary" 
+                  href={s3Link} 
+                  download="file.xlsx"
+                  component={Link}
+                >
+                  Download Excel File
+                </Button>
+                <Button 
+                  variant="outlined" 
+                  color="secondary" 
+                  onClick={handleReset}
+                >
+                  Go Back
+                </Button>
+              </>
             )}
-          
           </Box>
           <Box sx={{ mt: 2 }}>
             <DataTable data={tableData} />
