@@ -101,7 +101,7 @@ const App: React.FC = () => {
                   color="secondary" 
                   onClick={handleReset}
                 >
-                  Go Back
+                  Back
                 </Button>
               </>
             )}

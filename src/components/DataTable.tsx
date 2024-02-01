@@ -9,12 +9,12 @@ const DataTable: React.FC<DataTableProps> = ({ data }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
-  if (!data || data.length === 0) return <p> </p>;
+  if (!data || data.length === 0) return <p></p>;
 
   const columns = data[0] ? Object.keys(data[0]) : [];
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    console.log(event)
+    console.log('event', event);
     setPage(newPage);
   };
 
@@ -28,8 +28,16 @@ const DataTable: React.FC<DataTableProps> = ({ data }) => {
   const displayedData = data.slice(startIndex, endIndex);
 
   const paginationStyles = {
-    color: 'white', // Set the color to white
+    color: 'white',
   };
+
+  const headerStyles = {
+    fontWeight: 'bold',
+  };
+
+  const rowStyles = (index: number) => ({
+    backgroundColor: index % 2 === 0 ? '#f7f7f7' : 'white', // Alternate row colors
+  });
 
   return (
     <div>
@@ -38,13 +46,13 @@ const DataTable: React.FC<DataTableProps> = ({ data }) => {
           <TableHead>
             <TableRow>
               {columns.map((column, index) => (
-                <TableCell key={index}>{column}</TableCell>
+                <TableCell key={index} sx={headerStyles}>{column}</TableCell> // Apply bold font for headers
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {displayedData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow key={rowIndex} sx={rowStyles(rowIndex)}>  {/* Apply alternate row colors */}
                 {columns.map((column, colIndex) => (
                   <TableCell key={colIndex}>{row[column]}</TableCell>
                 ))}
@@ -61,7 +69,7 @@ const DataTable: React.FC<DataTableProps> = ({ data }) => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={paginationStyles} // Apply the custom styles to the TablePagination component
+        sx={paginationStyles}
       />
     </div>
   );
