@@ -22,7 +22,7 @@ const App: React.FC = () => {
     setIsSearching(true);
 
     try {
-      const url = new URL('https://k6dc2hc344kbuw4zjrxdq2m6wy0yxnxc.lambda-url.us-east-1.on.aws/');
+      const url = new URL('https://oysd2i2wnzdf57panv5jd2w3oq0jffdh.lambda-url.us-east-1.on.aws/');
       url.searchParams.append('address', address);
 
       const response = await fetch(url.toString(), { method: 'GET' });
