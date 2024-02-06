@@ -59,7 +59,7 @@ const App: React.FC = () => {
         />
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="h4" gutterBottom>
-            Ally's Lottery Box
+            Transaction Activity Tool
           </Typography>
           <SearchBar 
             onSearch={handleSearch} 

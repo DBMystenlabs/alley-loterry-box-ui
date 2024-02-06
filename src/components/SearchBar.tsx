@@ -4,7 +4,7 @@ import '../styles/SearchBar.css';
 interface SearchBarProps {
   onSearch: (address: string) => void;
   isSearching: boolean;
-  hideCalculateButton: boolean;  // Added prop
+  hideCalculateButton: boolean;  
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching, hideCalculateButton }) => {
@@ -32,7 +32,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isSearching, hideCalcul
       {!isValidAddress && address !== '' && (
         <p className="error-message">Invalid Address</p>
       )}
-      {!hideCalculateButton && (  // Conditional rendering based on hideCalculateButton
+      {!hideCalculateButton && (  
         <button 
           onClick={handleSearchClick} 
           disabled={isSearching || !isValidAddress}
